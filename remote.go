@@ -1,19 +1,12 @@
 package viper
 
 import (
-	"bytes"
-	"fmt"
 	"io"
-	"reflect"
-	"slices"
 )
 
-// SupportedRemoteProviders are universally supported remote providers.
 var SupportedRemoteProviders = []string{"etcd", "etcd3", "consul", "firestore", "nats"}
 
-func resetRemote() {
-	SupportedRemoteProviders = []string{"etcd", "etcd3", "consul", "firestore", "nats"}
-}
+func resetRemote() { _ = "STUB: not implemented"; return }
 
 type remoteConfigFactory interface {
 	Get(rp RemoteProvider) (io.Reader, error)
@@ -21,32 +14,20 @@ type remoteConfigFactory interface {
 	WatchChannel(rp RemoteProvider) (<-chan *RemoteResponse, chan bool)
 }
 
-// RemoteResponse represents a response from a remote configuration provider.
 type RemoteResponse struct {
 	Value []byte
 	Error error
 }
 
-// RemoteConfig is optional, see the remote package.
 var RemoteConfig remoteConfigFactory
 
-// UnsupportedRemoteProviderError denotes encountering an unsupported remote
-// provider. Currently only etcd and Consul are supported.
 type UnsupportedRemoteProviderError string
 
-// Error returns the formatted remote provider error.
-func (str UnsupportedRemoteProviderError) Error() string {
-	return fmt.Sprintf("Unsupported Remote Provider Type %q", string(str))
-}
+func (str UnsupportedRemoteProviderError) Error() string { _ = "STUB: not implemented"; return "" }
 
-// RemoteConfigError denotes encountering an error while trying to
-// pull the configuration from the remote provider.
 type RemoteConfigError string
 
-// Error returns the formatted remote provider error.
-func (rce RemoteConfigError) Error() string {
-	return fmt.Sprintf("Remote Configurations Error: %s", string(rce))
-}
+func (rce RemoteConfigError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type defaultRemoteProvider struct {
 	provider      string
@@ -55,26 +36,14 @@ type defaultRemoteProvider struct {
 	secretKeyring string
 }
 
-func (rp defaultRemoteProvider) Provider() string {
-	return rp.provider
-}
+func (rp defaultRemoteProvider) Provider() string { _ = "STUB: not implemented"; return "" }
 
-func (rp defaultRemoteProvider) Endpoint() string {
-	return rp.endpoint
-}
+func (rp defaultRemoteProvider) Endpoint() string { _ = "STUB: not implemented"; return "" }
 
-func (rp defaultRemoteProvider) Path() string {
-	return rp.path
-}
+func (rp defaultRemoteProvider) Path() string { _ = "STUB: not implemented"; return "" }
 
-func (rp defaultRemoteProvider) SecretKeyring() string {
-	return rp.secretKeyring
-}
+func (rp defaultRemoteProvider) SecretKeyring() string { _ = "STUB: not implemented"; return "" }
 
-// RemoteProvider stores the configuration necessary
-// to connect to a remote key/value store.
-// Optional secretKeyring to unencrypt encrypted values
-// can be provided.
 type RemoteProvider interface {
 	Provider() string
 	Endpoint() string
@@ -82,203 +51,53 @@ type RemoteProvider interface {
 	SecretKeyring() string
 }
 
-// AddRemoteProvider adds a remote configuration source.
-// Remote Providers are searched in the order they are added.
-// provider is a string value: "etcd", "etcd3", "consul", "firestore" or "nats" are currently supported.
-// endpoint is the url.  etcd requires http://ip:port, consul requires ip:port, nats requires nats://ip:port
-// path is the path in the k/v store to retrieve configuration
-// To retrieve a config file called myapp.json from /configs/myapp.json
-// you should set path to /configs and set config name (SetConfigName()) to
-// "myapp".
 func AddRemoteProvider(provider, endpoint, path string) error {
-	return v.AddRemoteProvider(provider, endpoint, path)
-}
-
-// AddRemoteProvider adds a remote configuration source.
-// Remote Providers are searched in the order they are added.
-// provider is a string value: "etcd", "etcd3", "consul", "firestore" or "nats" are currently supported.
-// endpoint is the url.  etcd requires http://ip:port, consul requires ip:port, nats requires nats://ip:port
-// path is the path in the k/v store to retrieve configuration
-// To retrieve a config file called myapp.json from /configs/myapp.json
-// you should set path to /configs and set config name (SetConfigName()) to
-// "myapp".
-func (v *Viper) AddRemoteProvider(provider, endpoint, path string) error {
-	if !slices.Contains(SupportedRemoteProviders, provider) {
-		return UnsupportedRemoteProviderError(provider)
-	}
-	if provider != "" && endpoint != "" {
-		v.logger.Info("adding remote provider", "provider", provider, "endpoint", endpoint)
-
-		rp := &defaultRemoteProvider{
-			endpoint: endpoint,
-			provider: provider,
-			path:     path,
-		}
-		if !v.providerPathExists(rp) {
-			v.remoteProviders = append(v.remoteProviders, rp)
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-// AddSecureRemoteProvider adds a remote configuration source.
-// Secure Remote Providers are searched in the order they are added.
-// provider is a string value: "etcd", "etcd3", "consul", "firestore" or "nats" are currently supported.
-// endpoint is the url.  etcd requires http://ip:port  consul requires ip:port
-// secretkeyring is the filepath to your openpgp secret keyring.  e.g. /etc/secrets/myring.gpg
-// path is the path in the k/v store to retrieve configuration
-// To retrieve a config file called myapp.json from /configs/myapp.json
-// you should set path to /configs and set config name (SetConfigName()) to
-// "myapp".
-// Secure Remote Providers are implemented with github.com/sagikazarmark/crypt.
-func AddSecureRemoteProvider(provider, endpoint, path, secretkeyring string) error {
-	return v.AddSecureRemoteProvider(provider, endpoint, path, secretkeyring)
+func (v *Viper) AddRemoteProvider(provider, endpoint, path string) error {
+	_ = "STUB: not implemented"
+	return nil
 }
 
-// AddSecureRemoteProvider adds a remote configuration source.
-// Secure Remote Providers are searched in the order they are added.
-// provider is a string value: "etcd", "etcd3", "consul", "firestore" or "nats" are currently supported.
-// endpoint is the url.  etcd requires http://ip:port  consul requires ip:port
-// secretkeyring is the filepath to your openpgp secret keyring.  e.g. /etc/secrets/myring.gpg
-// path is the path in the k/v store to retrieve configuration
-// To retrieve a config file called myapp.json from /configs/myapp.json
-// you should set path to /configs and set config name (SetConfigName()) to
-// "myapp".
-// Secure Remote Providers are implemented with github.com/sagikazarmark/crypt.
-func (v *Viper) AddSecureRemoteProvider(provider, endpoint, path, secretkeyring string) error {
-	if !slices.Contains(SupportedRemoteProviders, provider) {
-		return UnsupportedRemoteProviderError(provider)
-	}
-	if provider != "" && endpoint != "" {
-		v.logger.Info("adding remote provider", "provider", provider, "endpoint", endpoint)
+func AddSecureRemoteProvider(provider, endpoint, path, secretkeyring string) error {
+	_ = "STUB: not implemented"
+	return nil
+}
 
-		rp := &defaultRemoteProvider{
-			endpoint:      endpoint,
-			provider:      provider,
-			path:          path,
-			secretKeyring: secretkeyring,
-		}
-		if !v.providerPathExists(rp) {
-			v.remoteProviders = append(v.remoteProviders, rp)
-		}
-	}
+func (v *Viper) AddSecureRemoteProvider(provider, endpoint, path, secretkeyring string) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (v *Viper) providerPathExists(p *defaultRemoteProvider) bool {
-	for _, y := range v.remoteProviders {
-		if reflect.DeepEqual(y, p) {
-			return true
-		}
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
-// ReadRemoteConfig attempts to get configuration from a remote source
-// and read it in the remote configuration registry.
-func ReadRemoteConfig() error { return v.ReadRemoteConfig() }
+func ReadRemoteConfig() error { _ = "STUB: not implemented"; return nil }
 
-// ReadRemoteConfig attempts to get configuration from a remote source
-// and read it in the remote configuration registry.
-func (v *Viper) ReadRemoteConfig() error {
-	return v.getKeyValueConfig()
-}
+func (v *Viper) ReadRemoteConfig() error { _ = "STUB: not implemented"; return nil }
 
-// WatchRemoteConfig updates configuration from available remote providers.
-func WatchRemoteConfig() error { return v.WatchRemoteConfig() }
+func WatchRemoteConfig() error { _ = "STUB: not implemented"; return nil }
 
-// WatchRemoteConfig updates configuration from available remote providers.
-func (v *Viper) WatchRemoteConfig() error {
-	return v.watchKeyValueConfig()
-}
+func (v *Viper) WatchRemoteConfig() error { _ = "STUB: not implemented"; return nil }
 
-// WatchRemoteConfigOnChannel updates configuration from available remote providers.
-func (v *Viper) WatchRemoteConfigOnChannel() error {
-	return v.watchKeyValueConfigOnChannel()
-}
+func (v *Viper) WatchRemoteConfigOnChannel() error { _ = "STUB: not implemented"; return nil }
 
-// Retrieve the first found remote configuration.
-func (v *Viper) getKeyValueConfig() error {
-	if RemoteConfig == nil {
-		return RemoteConfigError("Enable the remote features by doing a blank import of the viper/remote package: '_ github.com/spf13/viper/remote'")
-	}
-
-	if len(v.remoteProviders) == 0 {
-		return RemoteConfigError("No Remote Providers")
-	}
-
-	for _, rp := range v.remoteProviders {
-		val, err := v.getRemoteConfig(rp)
-		if err != nil {
-			v.logger.Error(fmt.Errorf("get remote config: %w", err).Error())
-
-			continue
-		}
-
-		v.kvstore = val
-
-		return nil
-	}
-	return RemoteConfigError("No Files Found")
-}
+func (v *Viper) getKeyValueConfig() error { _ = "STUB: not implemented"; return nil }
 
 func (v *Viper) getRemoteConfig(provider RemoteProvider) (map[string]any, error) {
-	reader, err := RemoteConfig.Get(provider)
-	if err != nil {
-		return nil, err
-	}
-	err = v.unmarshalReader(reader, v.kvstore)
-	return v.kvstore, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-// Retrieve the first found remote configuration.
-func (v *Viper) watchKeyValueConfigOnChannel() error {
-	if len(v.remoteProviders) == 0 {
-		return RemoteConfigError("No Remote Providers")
-	}
+func (v *Viper) watchKeyValueConfigOnChannel() error { _ = "STUB: not implemented"; return nil }
 
-	for _, rp := range v.remoteProviders {
-		respc, _ := RemoteConfig.WatchChannel(rp)
-		// Todo: Add quit channel
-		go func(rc <-chan *RemoteResponse) {
-			for {
-				b := <-rc
-				reader := bytes.NewReader(b.Value)
-				err := v.unmarshalReader(reader, v.kvstore)
-				if err != nil {
-					v.logger.Error(fmt.Errorf("failed to unmarshal remote config: %w", err).Error())
-				}
-			}
-		}(respc)
-		return nil
-	}
-	return RemoteConfigError("No Files Found")
-}
-
-// Retrieve the first found remote configuration.
-func (v *Viper) watchKeyValueConfig() error {
-	if len(v.remoteProviders) == 0 {
-		return RemoteConfigError("No Remote Providers")
-	}
-
-	for _, rp := range v.remoteProviders {
-		val, err := v.watchRemoteConfig(rp)
-		if err != nil {
-			v.logger.Error(fmt.Errorf("watch remote config: %w", err).Error())
-
-			continue
-		}
-		v.kvstore = val
-		return nil
-	}
-	return RemoteConfigError("No Files Found")
-}
+func (v *Viper) watchKeyValueConfig() error { _ = "STUB: not implemented"; return nil }
 
 func (v *Viper) watchRemoteConfig(provider RemoteProvider) (map[string]any, error) {
-	reader, err := RemoteConfig.Watch(provider)
-	if err != nil {
-		return nil, err
-	}
-	err = v.unmarshalReader(reader, v.kvstore)
-	return v.kvstore, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }

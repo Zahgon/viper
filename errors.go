@@ -1,93 +1,48 @@
 package viper
 
-import (
-	"fmt"
-)
-
-// FileLookupError is returned when Viper cannot resolve a configuration file.
-//
-// This is meant to be a common interface for all file look-up errors, occurring either because a
-// file does not exist or because it cannot find any file matching finder criteria.
 type FileLookupError interface {
 	error
 
 	fileLookup()
 }
 
-// ConfigFileNotFoundError denotes failing to find a configuration file from a search.
-//
-// Deprecated: This is error wraps [FileNotFoundFromSearchError], which should be used instead.
 type ConfigFileNotFoundError struct {
 	locations []string
 	name      string
 }
 
-// Error returns the formatted error.
-func (e ConfigFileNotFoundError) Error() string {
-	return e.Unwrap().Error()
-}
+func (e ConfigFileNotFoundError) Error() string { _ = "STUB: not implemented"; return "" }
 
-// Unwraps to FileNotFoundFromSearchError.
-func (e ConfigFileNotFoundError) Unwrap() error {
-	return FileNotFoundFromSearchError(e)
-}
+func (e ConfigFileNotFoundError) Unwrap() error { _ = "STUB: not implemented"; return nil }
 
-// FileNotFoundFromSearchError denotes failing to find a configuration file from a search.
-// Wraps ConfigFileNotFoundError.
 type FileNotFoundFromSearchError struct {
 	locations []string
 	name      string
 }
 
-func (e FileNotFoundFromSearchError) fileLookup() {}
+func (e FileNotFoundFromSearchError) fileLookup() { _ = "STUB: not implemented"; return }
 
-// Error returns the formatted error.
-func (e FileNotFoundFromSearchError) Error() string {
-	message := fmt.Sprintf("File %q not found", e.name)
+func (e FileNotFoundFromSearchError) Error() string { _ = "STUB: not implemented"; return "" }
 
-	if len(e.locations) > 0 {
-		message += fmt.Sprintf(" in %v", e.locations)
-	}
-
-	return message
-}
-
-// FileNotFoundError denotes failing to find a specific configuration file.
 type FileNotFoundError struct {
 	err  error
 	path string
 }
 
-func (e FileNotFoundError) fileLookup() {}
+func (e FileNotFoundError) fileLookup() { _ = "STUB: not implemented"; return }
 
-// Error returns the formatted error.
-func (e FileNotFoundError) Error() string {
-	return fmt.Sprintf("file not found: %s", e.path)
-}
+func (e FileNotFoundError) Error() string { _ = "STUB: not implemented"; return "" }
 
-// ConfigFileAlreadyExistsError denotes failure to write new configuration file.
 type ConfigFileAlreadyExistsError string
 
-// Error returns the formatted error when configuration already exists.
-func (e ConfigFileAlreadyExistsError) Error() string {
-	return fmt.Sprintf("Config File %q Already Exists", string(e))
-}
+func (e ConfigFileAlreadyExistsError) Error() string { _ = "STUB: not implemented"; return "" }
 
-// ConfigMarshalError happens when failing to marshal the configuration.
 type ConfigMarshalError struct {
 	err error
 }
 
-// Error returns the formatted configuration error.
-func (e ConfigMarshalError) Error() string {
-	return fmt.Sprintf("While marshaling config: %s", e.err.Error())
-}
+func (e ConfigMarshalError) Error() string { _ = "STUB: not implemented"; return "" }
 
-// UnsupportedConfigError denotes encountering an unsupported
-// configuration filetype.
 type UnsupportedConfigError string
 
-// Error returns the formatted configuration error.
-func (str UnsupportedConfigError) Error() string {
-	return fmt.Sprintf("Unsupported Config Type %q", string(str))
-}
+func (str UnsupportedConfigError) Error() string { _ = "STUB: not implemented"; return "" }
